@@ -50,7 +50,7 @@ const AttSchema = Schema({
     uppercase: true,
   },
 
-  FEHCHA_AGREGACION: {
+  FECHA_AGREGACION: {
     type: Date,
     uppercase: true,
   },

@@ -21,7 +21,7 @@ router.post("", async (req, res) => {
     const dataFilter = datos.map(
       ({ OTROS_BENEFICIOS, DESCRIPCION, ...rest }) => ({
         ...rest,
-        FEHCHA_AGREGACION: req.body.FEHCHA_AGREGACION, // Agregar la fecha de agregación proporcionada en la solicitud
+        FECHA_AGREGACION: req.body.FECHA_AGREGACION, // Agregar la fecha de agregación proporcionada en la solicitud
       })
     );
 
@@ -48,7 +48,7 @@ router.post("", async (req, res) => {
   }
 });
 
-/* router.post("", async (req, res) => {
+/* router.get("", async (req, res) => {
   try {
     const data = await attService.add(req.body);
     return res.status(200).json(data);
