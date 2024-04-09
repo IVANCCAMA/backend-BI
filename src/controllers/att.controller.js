@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const attService = require("../services/att.service");
 
-router.get("", async (req, res) => {
+router.post("", async (req, res) => {
   try {
     const url =
       "https://tarifas.att.gob.bo/index.php/tarifaspizarra/tarifasInternetFijo";
@@ -25,8 +25,19 @@ router.get("", async (req, res) => {
     // Almacenar los datos en la base de datos MongoDB
     const savedData = await attService.addMany(dataFilter);
 
-    // Enviar los datos almacenados como respuesta
-    return res.status(200).json(savedData);
+    // Verificar si los datos se guardaron correctamente
+    if (savedData) {
+      return res
+        .status(200)
+        .json({ ok: true, message: "Datos guardados correctamente" });
+    } else {
+      return res
+        .status(500)
+        .json({
+          ok: false,
+          message: "Error al guardar los datos en la base de datos",
+        });
+    }
   } catch (error) {
     // Manejar cualquier error que ocurra durante la solicitud
     console.error("Error al recuperar los datos:", error);
@@ -36,7 +47,7 @@ router.get("", async (req, res) => {
   }
 });
 
-router.post("", async (req, res) => {
+/* router.post("", async (req, res) => {
   try {
     const data = await attService.add(req.body);
     return res.status(200).json(data);
@@ -46,6 +57,6 @@ router.post("", async (req, res) => {
       message: "Error en el servidor",
     });
   }
-});
+}); */
 
 module.exports = router;
