@@ -48,16 +48,26 @@ router.post("", async (req, res) => {
   }
 });
 
-/* router.get("", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const data = await attService.add(req.body);
-    return res.status(200).json(data);
+    // Obtener todos los datos de la base de datos
+    const data = await attService.get();
+
+    // Verificar si se obtuvieron los datos correctamente
+    if (data) {
+      return res.status(200).json({ ok: true, data });
+    } else {
+      return res
+        .status(404)
+        .json({ ok: false, message: "No se encontraron datos" });
+    }
   } catch (error) {
-    res.status(500).json({
-      ok: false,
-      message: "Error en el servidor",
-    });
+    // Manejar cualquier error que ocurra durante la solicitud
+    console.error("Error al obtener los datos:", error);
+    return res
+      .status(500)
+      .json({ ok: false, message: "Ocurrió un error al obtener los datos" });
   }
-}); */
+});
 
 module.exports = router;
