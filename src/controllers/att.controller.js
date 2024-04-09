@@ -70,4 +70,30 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/file", async (req, res) => {
+  try {
+    // Obtener todos los datos de la base de datos
+    const data = await attService.get();
+
+    // Verificar si se obtuvieron los datos correctamente
+    if (data) {
+      // Establecer el encabezado Content-Type
+      res.setHeader("Content-Type", "application/json");
+
+      // Enviar la respuesta como un archivo JSON
+      res.status(200).send(JSON.stringify(data));
+    } else {
+      return res
+        .status(404)
+        .json({ ok: false, message: "No se encontraron datos" });
+    }
+  } catch (error) {
+    // Manejar cualquier error que ocurra durante la solicitud
+    console.error("Error al obtener los datos:", error);
+    return res
+      .status(500)
+      .json({ ok: false, message: "Ocurrió un error al obtener los datos" });
+  }
+});
+
 module.exports = router;
