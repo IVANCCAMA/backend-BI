@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const attService = require("../services/att.service");
 
 router.get("", async (req, res) => {
   try {
@@ -21,8 +22,11 @@ router.get("", async (req, res) => {
       ({ OTROS_BENEFICIOS, DESCRIPCION, ...rest }) => rest
     );
 
-    // Enviar los datos recuperados como respuesta
-    return res.status(200).json({ dataFilter });
+    // Almacenar los datos en la base de datos MongoDB
+    const savedData = await attService.addMany(dataFilter);
+
+    // Enviar los datos almacenados como respuesta
+    return res.status(200).json(savedData);
   } catch (error) {
     // Manejar cualquier error que ocurra durante la solicitud
     console.error("Error al recuperar los datos:", error);

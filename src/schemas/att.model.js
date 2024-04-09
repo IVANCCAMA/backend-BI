@@ -49,6 +49,11 @@ const AttSchema = Schema({
     type: String,
     uppercase: true,
   },
+
+  FEHCHA_AGREGACION: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 AttSchema.method("toJSON", function () {
