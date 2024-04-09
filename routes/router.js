@@ -1,7 +1,7 @@
 const router = require("express").Router();
-const LevelController = require("../src/controllers/level.controller");
+const JobController = require("../src/controllers/job.controller");
 const AttController = require("../src/controllers/att.controller");
 
-router.use("/levels", LevelController);
+router.use("/job", JobController);
 router.use("/att", AttController);
 module.exports = router;
