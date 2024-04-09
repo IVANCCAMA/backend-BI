@@ -1,4 +1,4 @@
-const { default: mongoose } = require('mongoose')
+/* const { default: mongoose } = require('mongoose')
 const JobDetailModel = require('../schemas/jobDetail.model')
 const JobModel = require('../schemas/job.model')
 const OfficerModel = require('../schemas/officer.model')
@@ -597,3 +597,4 @@ const officerModel = require('../schemas/officer.model')
 
 
 
+ */

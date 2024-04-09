@@ -1,4 +1,4 @@
-const router = require('express').Router()
+/* const router = require('express').Router()
 const { request, response, text } = require('express');
 
 const jobService = require('../services/job.service')
@@ -244,4 +244,4 @@ router.put('/:id', async (req = request, res = response) => {
 
 router.get('/JoinLevel', jobService.getJoinLevel);
 
-module.exports = router
+module.exports = router */
