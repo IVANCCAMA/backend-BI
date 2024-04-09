@@ -19,7 +19,10 @@ router.post("", async (req, res) => {
 
     // Filtrar los campos "OTROS_BENEFICIOS" y "DESCRIPCION" de cada objeto
     const dataFilter = datos.map(
-      ({ OTROS_BENEFICIOS, DESCRIPCION, ...rest }) => rest
+      ({ OTROS_BENEFICIOS, DESCRIPCION, ...rest }) => ({
+        ...rest,
+        FEHCHA_AGREGACION: req.body.FEHCHA_AGREGACION, // Agregar la fecha de agregación proporcionada en la solicitud
+      })
     );
 
     // Almacenar los datos en la base de datos MongoDB
@@ -31,12 +34,10 @@ router.post("", async (req, res) => {
         .status(200)
         .json({ ok: true, message: "Datos guardados correctamente" });
     } else {
-      return res
-        .status(500)
-        .json({
-          ok: false,
-          message: "Error al guardar los datos en la base de datos",
-        });
+      return res.status(500).json({
+        ok: false,
+        message: "Error al guardar los datos en la base de datos",
+      });
     }
   } catch (error) {
     // Manejar cualquier error que ocurra durante la solicitud
