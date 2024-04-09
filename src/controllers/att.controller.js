@@ -1,8 +1,5 @@
-const router = require("express").Router();
-const axios = require("axios");
-const { request, response, text } = require("express");
-
-const attService = require("../services/att.service");
+const express = require("express");
+const router = express.Router();
 
 router.get("", async (req, res) => {
   try {
@@ -10,22 +7,22 @@ router.get("", async (req, res) => {
       "https://tarifas.att.gob.bo/index.php/tarifaspizarra/tarifasInternetFijo";
 
     // Hacer la solicitud GET a la URL especificada
-    const response = await axios.get(url);
+    const response = await fetch(url); // Utiliza fetch para hacer la solicitud
+    const body = await response.text();
 
-    // Verificar que la solicitud haya tenido éxito (código de estado 200)
-    if (response.status === 200) {
-      // Los datos de la página estarán en response.data
-      // Puedes procesarlos según tus necesidades
-      const datos = response.data;
+    // Extraer el valor de la variable dataJSONArray del cuerpo de la respuesta
+    const dataString = body.match(
+      /var dataJSONArray = JSON.parse\('([^']+)'\);/
+    )[1];
+    const datos = JSON.parse(dataString);
 
-      // Enviar los datos recuperados como respuesta
-      return res.status(200).json({ ok: true, datas: datos });
-    } else {
-      // Enviar un mensaje de error si la solicitud no tuvo éxito
-      return res
-        .status(response.status)
-        .json({ ok: false, message: "No se pudieron recuperar los datos" });
-    }
+    // Filtrar los campos "OTROS_BENEFICIOS" y "DESCRIPCION" de cada objeto
+    const dataFilter = datos.map(
+      ({ OTROS_BENEFICIOS, DESCRIPCION, ...rest }) => rest
+    );
+
+    // Enviar los datos recuperados como respuesta
+    return res.status(200).json({ dataFilter });
   } catch (error) {
     // Manejar cualquier error que ocurra durante la solicitud
     console.error("Error al recuperar los datos:", error);
@@ -35,15 +32,14 @@ router.get("", async (req, res) => {
   }
 });
 
-router.post("", async (req = request, res = response) => {
+router.post("", async (req, res) => {
   try {
     const data = await attService.add(req.body);
     return res.status(200).json(data);
   } catch (error) {
-    //console.log(error);
     res.status(500).json({
       ok: false,
-      message: "Error in server",
+      message: "Error en el servidor",
     });
   }
 });
