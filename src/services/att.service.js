@@ -2,8 +2,8 @@ const { default: mongoose } = require("mongoose");
 
 const AttModel = require("../schemas/att.model");
 
-exports.get = async () => {
-  return await AttModel.find({}).sort({ _id: 1 });
+exports.get = async (filter = {}) => {
+  return await AttModel.find(filter).sort({ _id: 1 });
 };
 
 exports.add = async (data) => {

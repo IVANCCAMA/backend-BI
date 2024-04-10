@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const attService = require("../services/att.service");
+const attService = require("../services/att.service.js");
 
 router.post("", async (req, res) => {
   try {
-    const url =
-      "https://tarifas.att.gob.bo/index.php/tarifaspizarra/tarifasInternetFijo";
+    const url ="https://tarifas.att.gob.bo/index.php/tarifaspizarra/tarifasInternetFijo";
 
     // Hacer la solicitud GET a la URL especificada
     const response = await fetch(url); // Utiliza fetch para hacer la solicitud
@@ -69,6 +68,28 @@ router.get("/", async (req, res) => {
       .json({ ok: false, message: "Ocurrió un error al obtener los datos" });
   }
 });
+
+router.get("/:fecha", async (req, res) => {
+  try {
+    const fechaFiltrar = new Date(req.params.fecha); // Convertir la fecha de la URL a un objeto Date
+
+    // Filtrar los datos por la fecha proporcionada
+    const data = await attService.get({ FECHA_AGREGACION: { $eq: fechaFiltrar } });
+
+    // Verificar si se encontraron datos con la fecha exacta proporcionada
+    if (data.length > 0) {
+      return res.status(200).json({ ok: true, data });
+    } else {
+      return res.status(404).json({ ok: false, message: "No se encontraron datos para la fecha especificada" });
+    }
+  } catch (error) {
+    // Manejar cualquier error que ocurra durante la solicitud
+    console.error("Error al obtener los datos:", error);
+    return res.status(500).json({ ok: false, message: "Ocurrió un error al obtener los datos" });
+  }
+});
+
+
 
 router.get("/file", async (req, res) => {
   try {
